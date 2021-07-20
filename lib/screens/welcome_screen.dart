@@ -8,7 +8,35 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  final double upperBound = 90.0;
+  AnimationController animController;
+
+  @override
+  void initState() {
+    super.initState();
+    animController = AnimationController(
+      duration: Duration(milliseconds: 1111),
+      lowerBound: 10,
+      upperBound: upperBound,
+      vsync: this,
+    );
+    animController.forward();
+    animController.addListener(() {
+      setState(() {});
+      //print(animController.value);
+    });
+  }
+
+  double animValueDouble({int division = 1}) {
+    return (animController.value / division).floorToDouble();
+  }
+
+  int animValueInt({int division = 1}) {
+    return (animController.value ~/ division);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,27 +53,31 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: 22.0,
+                    height: animValueDouble(),
                   ),
                 ),
                 Text(
-                  'Flash Chat',
+                  animController.value.toInt() == upperBound
+                      ? 'Flash Chat'
+                      : '${animValueInt()}%',
                   style: TextStyle(
-                    fontSize: 45.0,
+                    fontSize: animValueDouble(division: 2),
                     fontWeight: FontWeight.w900,
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 48.0,
+              height: animValueDouble(division: 2),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Material(
                 elevation: 5.0,
                 color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(
+                  animValueDouble(division: 3),
+                ),
                 child: MaterialButton(
                   onPressed: () {
                     //Go to login screen.
@@ -63,7 +95,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Material(
                 color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(
+                  animValueDouble(division: 3),
+                ),
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
