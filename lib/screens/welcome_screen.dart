@@ -13,18 +13,37 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   final double upperBound = 90.0;
   AnimationController animController;
   Animation animation;
+  Animation colorAnimation;
 
   @override
   void initState() {
     super.initState();
     animController = AnimationController(
-      duration: Duration(milliseconds: 1555),
+      duration: Duration(milliseconds: 1000),
       lowerBound: 0.0,
       upperBound: 1.0,
       vsync: this,
     );
+
     animation =
         CurvedAnimation(parent: animController, curve: Curves.easeOutCubic);
+
+    colorAnimation = ColorTween(begin: Colors.transparent, end: Colors.white)
+        .animate(animController);
+
+    animation.addStatusListener((status) {
+      print('animation status: $status');
+      /*
+      if (status == AnimationStatus.completed) {
+        animController.reverse();
+        return;
+      }
+      if (status == AnimationStatus.dismissed) {
+        animController.forward();
+        return;
+      }
+      */
+    });
     animController.forward();
     animController.addListener(() {
       setState(() {});
@@ -49,9 +68,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   @override
+  void dispose() {
+    animController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorAnimation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -79,16 +104,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               ],
             ),
             SizedBox(
-              height: animValueDouble(division: 2),
+              height: 22.0,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Material(
                 elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(
-                  animValueDouble(division: 3),
-                ),
+                color: Colors.lightBlueAccent.withOpacity(animation.value),
+                borderRadius: BorderRadius.circular(22),
                 child: MaterialButton(
                   onPressed: () {
                     //Go to login screen.
@@ -105,10 +128,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(
-                  animValueDouble(division: 3),
-                ),
+                color: Colors.blueAccent.withOpacity(animation.value),
+                borderRadius: BorderRadius.circular(22),
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
