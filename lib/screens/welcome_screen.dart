@@ -12,16 +12,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   final double upperBound = 90.0;
   AnimationController animController;
+  Animation animation;
 
   @override
   void initState() {
     super.initState();
     animController = AnimationController(
       duration: Duration(milliseconds: 1555),
-      lowerBound: 5,
-      upperBound: upperBound,
+      lowerBound: 0.0,
+      upperBound: 1.0,
       vsync: this,
     );
+    animation =
+        CurvedAnimation(parent: animController, curve: Curves.easeOutCubic);
     animController.forward();
     animController.addListener(() {
       setState(() {});
@@ -29,11 +32,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   double animValueDouble({int division = 1}) {
-    return (animController.value / division).floorToDouble();
+    return ((animation.value * upperBound) / division).floorToDouble();
   }
 
   int animValueInt({int division = 1}) {
-    return (animController.value ~/ division);
+    return ((animation.value * upperBound) ~/ division);
   }
 
   var sb = StringBuffer();
