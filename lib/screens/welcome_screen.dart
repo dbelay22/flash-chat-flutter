@@ -17,15 +17,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     animController = AnimationController(
-      duration: Duration(milliseconds: 1111),
-      lowerBound: 10,
+      duration: Duration(milliseconds: 1555),
+      lowerBound: 5,
       upperBound: upperBound,
       vsync: this,
     );
     animController.forward();
     animController.addListener(() {
       setState(() {});
-      //print(animController.value);
     });
   }
 
@@ -35,6 +34,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   int animValueInt({int division = 1}) {
     return (animController.value ~/ division);
+  }
+
+  var sb = StringBuffer();
+  String getAnimatedTitle() {
+    sb.clear();
+    for (var i = 0; i < 7; i++) {
+      sb.writeCharCode(animValueInt() + i);
+    }
+    return sb.toString();
   }
 
   @override
@@ -57,9 +65,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 Text(
-                  animController.value.toInt() == upperBound
+                  animValueInt() == upperBound
                       ? 'Flash Chat'
-                      : '${animValueInt()}%',
+                      : getAnimatedTitle(),
                   style: TextStyle(
                     fontSize: animValueDouble(division: 2),
                     fontWeight: FontWeight.w900,
