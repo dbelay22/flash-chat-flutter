@@ -1,6 +1,11 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
+
+const kTextButtonStyle = TextStyle(
+  fontSize: 18.0,
+);
 
 class WelcomeScreen extends StatefulWidget {
   static final String id = 'welcome';
@@ -32,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         .animate(animController);
 
     animation.addStatusListener((status) {
-      print('animation status: $status');
+      //print('animation status: $status');
       /*
       if (status == AnimationStatus.completed) {
         animController.reverse();
@@ -71,6 +76,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void dispose() {
     animController.dispose();
     super.dispose();
+  }
+
+  Widget getAnimatedText(text) {
+    return AnimatedTextKit(
+      animatedTexts: [
+        TypewriterAnimatedText(
+          text,
+          textStyle: kTextButtonStyle,
+          speed: Duration(milliseconds: 150),
+        ),
+      ],
+      totalRepeatCount: 1,
+    );
   }
 
   @override
@@ -119,9 +137,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   },
                   minWidth: 200.0,
                   height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
+                  child: getAnimatedText('Log In'),
                 ),
               ),
             ),
@@ -138,9 +154,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   },
                   minWidth: 200.0,
                   height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
+                  child: getAnimatedText('Register'),
                 ),
               ),
             ),
