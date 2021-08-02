@@ -14,7 +14,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   final double upperBound = 90.0;
   AnimationController animController;
   Animation animation;
-  Animation colorAnimation;
+  //Animation colorAnimation;
 
   @override
   void initState() {
@@ -29,8 +29,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     animation =
         CurvedAnimation(parent: animController, curve: Curves.easeOutCubic);
 
-    colorAnimation = ColorTween(begin: Colors.white, end: Colors.orangeAccent)
+    /*
+    colorAnimation = ColorTween(begin: Colors.white, end: Colors.grey)
         .animate(animController);
+    */
 
     animation.addStatusListener((status) {
       //print('animation status: $status');
@@ -92,7 +94,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorAnimation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(

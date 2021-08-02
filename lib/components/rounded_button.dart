@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 const kTextButtonStyle = TextStyle(
-  fontSize: 18.0,
+  fontSize: 16.0,
+  color: Colors.white,
 );
 
 class RoundedButton extends StatelessWidget {
