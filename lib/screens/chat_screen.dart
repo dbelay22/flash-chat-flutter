@@ -30,6 +30,12 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  void logout() {
+    print('login out ${_auth.currentUser.email}...');
+    _auth.signOut();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                //Implement logout functionality
+                logout();
               }),
         ],
         title: Text('⚡️Chat'),
