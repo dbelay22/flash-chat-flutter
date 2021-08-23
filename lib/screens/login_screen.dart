@@ -1,6 +1,9 @@
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'chat_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static final String id = 'login';
@@ -10,6 +13,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
+
+  void login(BuildContext context) async {
+    // pwd: asdasd
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (userCredential != null) {
+        Navigator.pushNamed(context, ChatScreen.id);
+      }
+    } catch (e) {
+      print('error al crear usuario $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +50,11 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
               onChanged: (value) {
-                //Do something with the user input.
+                setState(() {
+                  email = value;
+                });
               },
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Ingrese su dirección de correo electrónico',
@@ -41,8 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              obscureText: true,
               onChanged: (value) {
-                //Do something with the user input.
+                password = value;
               },
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Ingrese su contraseña',
@@ -53,7 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             RoundedButton(
               label: 'Login',
-              onPressed: () {},
+              onPressed: () {
+                login(context);
+              },
               color: Colors.lightBlueAccent,
             ),
           ],
