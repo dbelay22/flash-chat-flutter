@@ -35,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void onSendPressed() {
-    saveMessage(sender: loggedInUser, message: message);
+    saveMessage(sender: loggedInUser.email, message: message);
   }
 
   void saveMessage({sender, message}) {
@@ -45,7 +45,8 @@ class _ChatScreenState extends State<ChatScreen> {
   getMessages() async {
     final messages = await _firestore.collection('messages').get();
     for (var message in messages.docs) {
-      final text = message.get('text');
+      //final text = message.get('text');
+      final text = message.data();
       print('message [$text]');
     }
   }

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'chat_screen.dart';
 
+// betun2021
+
 class LoginScreen extends StatefulWidget {
   static final String id = 'login';
 
@@ -19,10 +21,15 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loginInProgress = false;
 
   Future login(BuildContext context) async {
-    // pwd: asdasd
+    // betun2021
     try {
+      //TODO DEBUG
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: "diego.belay@gmail.com", password: "betun2021");
+      /*
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+       */
       if (userCredential != null) {
         Navigator.pushNamed(context, ChatScreen.id);
       }
