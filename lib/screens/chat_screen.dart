@@ -19,6 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     getCurrentUser();
+    getMessages();
   }
 
   void getCurrentUser() {
@@ -30,6 +31,22 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     } catch (e) {
       print('error al obtener usuario $e');
+    }
+  }
+
+  void onSendPressed() {
+    saveMessage(sender: loggedInUser, message: message);
+  }
+
+  void saveMessage({sender, message}) {
+    _firestore.collection('messages').add({'sender': sender, 'text': message});
+  }
+
+  getMessages() async {
+    final messages = await _firestore.collection('messages').get();
+    for (var message in messages.docs) {
+      final text = message.get('text');
+      print('message [$text]');
     }
   }
 
@@ -74,9 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      _firestore
-                          .collection('messages')
-                          .add({'sender': loggedInUser.email, 'text': message});
+                      onSendPressed();
                     },
                     child: Text(
                       'Send',
