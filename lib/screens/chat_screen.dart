@@ -19,7 +19,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     getCurrentUser();
-    getMessages();
+
+    // load chat messages from cloud
+    //getMessages();
+    messagesStream();
   }
 
   void getCurrentUser() {
@@ -42,12 +45,21 @@ class _ChatScreenState extends State<ChatScreen> {
     _firestore.collection('messages').add({'sender': sender, 'text': message});
   }
 
+  void messagesStream() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
+        final messageData = message.data();
+        print('stream - message: $messageData');
+      }
+    }
+  }
+
   getMessages() async {
     final messages = await _firestore.collection('messages').get();
     for (var message in messages.docs) {
       //final text = message.get('text');
-      final text = message.data();
-      print('message [$text]');
+      final messageData = message.data();
+      print('message [$messageData]');
     }
   }
 
